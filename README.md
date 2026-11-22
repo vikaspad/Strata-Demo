@@ -1,5 +1,7 @@
 # Strata Demo
 
+[![Tests](https://github.com/vikaspad/Strata-Demo/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/vikaspad/Strata-Demo/actions/workflows/tests.yml)
+
 A small Selenium project for trying **Run with Locator Coverage** from the Strata IntelliJ plugin. Strata records
 every page your tests visit, gives each element a verified XPath, shows which elements your tests use, and heals test
 locators that stop working.
