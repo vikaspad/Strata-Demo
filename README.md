@@ -239,7 +239,7 @@ empty, so it is safe to keep in every build.
 
 ### 3. Copy the healer
 
-Copy `src/test/java/heal/` from this project into your test sources:
+Copy these classes from `src/test/java/heal/` in this project into your test sources:
 
 ```
 src/test/java/heal/
@@ -251,6 +251,13 @@ src/test/java/heal/
 ├── ElementFiles.java                 # picks the file (-Delements.file, heal.properties, or the default)
 └── selenium/HealingDriver.java       # wraps a WebDriver so every lookup heals; the only class that needs Selenium
 ```
+
+The first six depend on each other, so copy all of them, even if you use only one element-file format (`ElementFiles`
+opens both). `selenium/HealingDriver.java` is for Selenium suites. Without Selenium, skip it and call `Healer`
+directly, as its javadoc shows.
+
+Don't copy the test classes. `selenium/HealingDriverTest.java` uses this demo's `demo.WebElements` and won't compile in
+your project. `LocatorMatcherTest.java` compiles with JUnit 5 but only tests the matcher, so it's optional.
 
 Keep the package name `heal`, or rename it everywhere.
 
