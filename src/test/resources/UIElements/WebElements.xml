@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Every locator the demo tests use, as XPath 1.0. Java code reads them with demo.WebElements
+  (the file is configured in src/test/resources/heal.properties):
+
+      driver.findElement(WebElements.by("Login", "usernameInput"))   // self-healing: Browser.open() wraps the driver
+
+  An xpath that starts with "./" or ".//" is relative: use it with parent.findElement(...).
+  Under Run with Locator Coverage, an XPath that finds nothing is healed with the most similar Strata live locator
+  (by name, type and XPath values; see heal.LocatorMatcher), and healed XPaths are written back into this file when
+  the run ends. `strata` (optional) names the live locator (Module.element in .strata/locator-coverage.xml) to use
+  instead, for an element whose name doesn't resemble Strata's.
+  A class match is written contains(concat(' ', normalize-space(@class), ' '), ' x '), which is what the CSS ".x" means.
+-->
+<web-elements>
+
+    <!-- ===== Local demo site (DemoSite) ===== -->
+
+    <page name="Login" url="/login">
+        <element name="usernameInput" xpath="//form[@id='login-form']//input[@id='username']"/>
+        <element name="passwordInput" xpath="//form[@id='login-form']//input[@id='password']"/>
+        <element name="signInButton" xpath="//form[@id='login-form']//button[normalize-space()='Sign in']"/>
+    </page>
+
+    <page name="Blotter" url="/blotter/{id}">
+        <element name="counterpartyInput" xpath="//form[@id='blotter-filter']//input[@name='counterparty']"/>
+        <element name="applyFiltersButton" xpath="//form[@id='blotter-filter']//button[@aria-label='Apply filters']"/>
+        <element name="exportButton" xpath="//*[@aria-label='Export']"/>
+        <element name="heading" xpath="//h1"/>
+        <element name="allocateButton" xpath="//section[@id='allocations']//button[normalize-space()='Allocate']"/>
+    </page>
+
+    <page name="ExportDialog" url="/blotter/{id}">
+        <element name="dialog" xpath="//*[@id='export-dialog']"/>
+        <element name="downloadButton" xpath="//*[@data-testid='export-download']"/>
+    </page>
+
+    <page name="Components" url="/components">
+        <element name="fullNameInput" xpath="//*[@id='full-name']"/>
+        <element name="passwordInput" xpath="//*[@name='password']"/>
+        <element name="bioTextarea" xpath="//*[@id='bio']"/>
+        <element name="countryDropdown" xpath="//*[@id='country']"/>
+        <element name="newsletterCheckbox" xpath="//*[@name='newsletter']"/>
+        <element name="callMeRadio" xpath="//label[normalize-space()='Call me']/input"/>
+        <element name="downloadIcon" xpath="//*[@aria-label='Download']//i"/>
+        <element name="currencyToggle" xpath="//*[@id='currency-toggle']"/>
+        <element name="eurOption" xpath="//mat-option[normalize-space()='EUR']"/>
+        <element name="actionsToggle" xpath="//*[@id='actions-toggle']"/>
+        <element name="exportMenuItem" xpath="//li[@role='menuitem'][normalize-space()='Export']"/>
+        <element name="positionRows" xpath="//*[@id='positions']//tbody//tr"/>
+        <element name="secondPositionPriceCell" xpath="//table[@id='positions']/tbody/tr[2]/td[3]"/>
+        <element name="disclaimer" xpath="//*[@id='disclaimer']"/>
+        <element name="helpFrame" xpath="//iframe[@id='help-frame']"/>
+    </page>
+
+    <!-- Inside Components.helpFrame: switch to the frame first. -->
+    <page name="HelpFrame" url="/frame.html">
+        <element name="questionInput" xpath="//*[@id='question']"/>
+    </page>
+
+    <page name="Grid" url="/grid">
+        <element name="dataRows" xpath="//*[@role='row'][@row-index]"/>
+        <element name="orderIdHeader" xpath="//*[contains(concat(' ', normalize-space(@class), ' '), ' ag-header-cell ')][@col-id='orderId']"/>
+        <element name="secondRowCancelButton" xpath="//*[@row-index='1']//*[@col-id='actions']//button"/>
+        <element name="secondRowStatusCell" xpath="//*[@row-index='1']//*[@col-id='status']"/>
+        <element name="firstRowSideCell" xpath="//*[@row-index='0']//*[@col-id='side']"/>
+    </page>
+
+    <!--
+      SelfHealingTest. These start out deliberately broken: an id the button doesn't have, and a renamed grid column.
+      Under Run with Locator Coverage, heal.Healer replaces each one with the Strata live locator named in `strata`,
+      and when the run ends the Strata plugin writes the healed XPath here. To see the heal again, put back the
+      broken values: the id sign-in-button on signInButton, and the column notionalAmount on firstRowNotionalCell.
+    -->
+    <page name="HealingDemo">
+        <element name="signInButton" xpath="//*[@id='sign-in-button']" strata="LoginForm.signInButton"/>
+        <element name="firstRowNotionalCell" xpath="//*[@row-index='0']//*[@col-id='notionalAmount']" strata="OrdersGrid.notionalCell"/>
+    </page>
+
+    <!-- ===== saucedemo.com (SauceDemoTest, SauceDemoSteps) ===== -->
+
+    <page name="SauceLogin" url="https://www.saucedemo.com/">
+        <element name="usernameInput" xpath="//*[@id='user-name']"/>
+        <element name="passwordInput" xpath="//*[@id='password']"/>
+        <element name="loginButton" xpath="//*[@id='login-button']"/>
+    </page>
+
+    <page name="SauceInventory" url="https://www.saucedemo.com/inventory.html">
+        <element name="menuButton" xpath="//*[@id='react-burger-menu-btn']"/>
+        <element name="aboutLink" xpath="//*[@id='about_sidebar_link']"/>
+    </page>
+
+    <!-- ===== automationexercise.com (AutomationExerciseTest) ===== -->
+
+    <page name="AeNavigation" url="https://www.automationexercise.com">
+        <element name="productsLink" xpath="//a[@href='/products']"/>
+        <element name="loginLink" xpath="//a[@href='/login']"/>
+        <element name="contactUsLink" xpath="//a[@href='/contact_us']"/>
+    </page>
+
+    <page name="AeProducts" url="https://www.automationexercise.com/products">
+        <element name="listTitle" xpath="//*[contains(concat(' ', normalize-space(@class), ' '), ' features_items ')]//h2[contains(concat(' ', normalize-space(@class), ' '), ' title ')]"/>
+        <element name="searchInput" xpath="//*[@id='search_product']"/>
+        <element name="searchButton" xpath="//*[@id='submit_search']"/>
+        <element name="addToCartButton" xpath="//*[contains(concat(' ', normalize-space(@class), ' '), ' productinfo ')]//a[contains(concat(' ', normalize-space(@class), ' '), ' add-to-cart ')]"/>
+        <element name="cartModal" xpath="//*[@id='cartModal']"/>
+        <!-- Relative to cartModal. -->
+        <element name="viewCartLink" xpath=".//a[normalize-space()='View Cart']"/>
+    </page>
+
+    <page name="AeCart" url="https://www.automationexercise.com/view_cart">
+        <element name="productRow" xpath="//*[@id='cart_info_table']//tbody//tr"/>
+        <!-- Relative to productRow. -->
+        <element name="productNameLink" xpath=".//*[contains(concat(' ', normalize-space(@class), ' '), ' cart_description ')]//h4//a"/>
+        <element name="quantityButton" xpath=".//*[contains(concat(' ', normalize-space(@class), ' '), ' cart_quantity ')]//button"/>
+        <element name="deleteLink" xpath=".//a[contains(concat(' ', normalize-space(@class), ' '), ' cart_quantity_delete ')]"/>
+        <element name="emptyCartMessage" xpath="//*[@id='empty_cart']"/>
+    </page>
+
+    <page name="AeProductDetails" url="https://www.automationexercise.com/product_details/{id}">
+        <element name="productName" xpath="//*[contains(concat(' ', normalize-space(@class), ' '), ' product-information ')]//h2"/>
+        <element name="quantityInput" xpath="//*[@id='quantity']"/>
+    </page>
+
+    <page name="AeLogin" url="https://www.automationexercise.com/login">
+        <element name="emailInput" xpath="//*[@data-qa='login-email']"/>
+        <element name="passwordInput" xpath="//*[@data-qa='login-password']"/>
+        <element name="loginButton" xpath="//*[@data-qa='login-button']"/>
+        <element name="loginForm" xpath="//*[contains(concat(' ', normalize-space(@class), ' '), ' login-form ')]"/>
+        <element name="signupNameInput" xpath="//*[@data-qa='signup-name']"/>
+    </page>
+
+    <page name="AeContactUs" url="https://www.automationexercise.com/contact_us">
+        <element name="nameInput" xpath="//*[@data-qa='name']"/>
+        <element name="emailInput" xpath="//*[@data-qa='email']"/>
+        <element name="subjectInput" xpath="//*[@data-qa='subject']"/>
+        <element name="messageTextarea" xpath="//*[@data-qa='message']"/>
+        <element name="subjectByName" xpath="//*[@name='subject']"/>
+    </page>
+
+</web-elements>
