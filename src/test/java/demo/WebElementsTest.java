@@ -24,8 +24,8 @@ class WebElementsTest {
     void loadsTheConfiguredFile() {
         assertEquals(Path.of("src/test/resources/UIElements/WebElements.xml").toAbsolutePath().normalize(),
                 WebElements.repository().file());
-        assertEquals("//*[@id='username']", WebElements.xpath("Login", "usernameInput"));
-        assertEquals(By.xpath("//button[normalize-space()='Sign in']"), WebElements.by("Login", "signInButton"));
+        assertEquals("//form[@id='login-form']//input[@id='username']", WebElements.xpath("Login", "usernameInput"));
+        assertEquals(By.xpath("//form[@id='login-form']//button[normalize-space()='Sign in']"), WebElements.by("Login", "signInButton"));
         assertEquals(Optional.of("LoginForm.signInButton"),
                 WebElements.repository().strataKey("HealingDemo", "signInButton"));
     }
@@ -55,7 +55,7 @@ class WebElementsTest {
             return found;
         }, e -> e instanceof Healer.NotFoundException);
         assertSame(found, healer.find("Login", "signInButton"));
-        assertEquals(List.of("//button[normalize-space()='Sign in']"), asked);
+        assertEquals(List.of("//form[@id='login-form']//button[normalize-space()='Sign in']"), asked);
     }
 
     @Test
